@@ -1,0 +1,23 @@
+# AI Nexus Agent Instructions
+
+Host: https://saadgodikat.github.io/Ai-Store/
+
+# Structured data and API endpoints
+API: https://saadgodikat.github.io/Ai-Store/tools.json
+OpenAPI: https://saadgodikat.github.io/Ai-Store/openapi.json
+
+# Sitemap for URLs
+Sitemap: https://saadgodikat.github.io/Ai-Store/sitemap.xml
+
+# Description
+Description: AI Nexus is a curated directory of AI tools (2000+ verified entries) with categories like Chat, Image, Video, Coding, Writing, Audio, and Productivity. The tools.json endpoint provides a featured subset of 20-50 popular tools with complete metadata.
+
+# Usage
+Access: read-only
+Rate-limit: Please avoid abusive scraping. For bulk data access, use the tools.json endpoint.
+
+# Schema
+Tools follow this schema: name, slug, url, category, tags[], description, pricing, icon, verified, lastUpdated
+
+# Contact
+For questions or to submit tools, visit the repository: https://github.com/saadgodikat/Ai-Store

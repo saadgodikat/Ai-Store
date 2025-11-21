@@ -1,0 +1,123 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AI Nexus Tools API",
+    "version": "1.0.0",
+    "description": "Read-only API providing a curated list of AI tools from AI Nexus directory. The full directory contains 2000+ verified tools, while this API endpoint provides a featured subset of popular tools.",
+    "contact": {
+      "name": "AI Nexus",
+      "url": "https://github.com/saadgodikat/Ai-Store"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://saadgodikat.github.io/Ai-Store",
+      "description": "GitHub Pages production server"
+    }
+  ],
+  "paths": {
+    "/tools.json": {
+      "get": {
+        "summary": "List featured AI tools",
+        "description": "Returns the tools.json file containing metadata and a curated list of popular AI tools with complete information.",
+        "responses": {
+          "200": {
+            "description": "Successful response with tools data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalTools": {
+                          "type": "integer",
+                          "description": "Total number of tools in the full directory"
+                        },
+                        "featuredTools": {
+                          "type": "integer",
+                          "description": "Number of tools in this API response"
+                        },
+                        "lastUpdated": {
+                          "type": "string",
+                          "format": "date",
+                          "description": "Last update date in ISO 8601 format"
+                        },
+                        "version": {
+                          "type": "string",
+                          "description": "API version"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "Brief description of the directory"
+                        }
+                      }
+                    },
+                    "tools": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["name", "slug", "url", "category", "description", "verified"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Display name of the tool"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "description": "URL-friendly identifier"
+                          },
+                          "url": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "Official website URL"
+                          },
+                          "category": {
+                            "type": "string",
+                            "enum": ["Chat", "Image", "Video", "Coding", "Writing", "Audio", "Productivity"],
+                            "description": "Primary category of the tool"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Additional classification tags"
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Brief description of the tool's functionality"
+                          },
+                          "pricing": {
+                            "type": "string",
+                            "enum": ["Free", "Freemium", "Paid"],
+                            "description": "Pricing model"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "format": "uri",
+                            "description": "URL to the tool's icon/favicon (may be empty)"
+                          },
+                          "verified": {
+                            "type": "boolean",
+                            "description": "Whether the tool URL has been verified as working"
+                          },
+                          "lastUpdated": {
+                            "type": "string",
+                            "format": "date",
+                            "description": "Last verification/update date"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
