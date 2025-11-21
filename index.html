@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AI Tools Directory</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>AI Nexus</h1>
+                <p>Curated directory of the best AI tools</p>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search for AI tools..." autocomplete="off">
+                    <div id="search-suggestions" class="suggestions-container hidden"></div>
+                </div>
+            </div>
+
+            <button id="theme-toggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="categories-container">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="chat">Chat</button>
+            <button class="category-btn" data-category="image">Image</button>
+            <button class="category-btn" data-category="video">Video</button>
+            <button class="category-btn" data-category="coding">Coding</button>
+            <button class="category-btn" data-category="writing">Writing</button>
+            <button class="category-btn" data-category="audio">Audio</button>
+            <button class="category-btn" data-category="productivity">Productivity</button>
+        </div>
+    </header>
+    
+    <main>
+        <section id="tools-grid">
+            <!-- Tools will be dynamically inserted here -->
+        </section>
+        <div id="no-results" class="hidden">
+            <i class="fas fa-search"></i>
+            <p>No tools found matching your search.</p>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 AI Nexus. All Rights Reserved.</p>
+    </footer>
+
+    <script src="tools-data.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
