@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSuggestionIndex = -1;
     let debounceTimer = null;
 
+    let currentPage = 1;
+    const itemsPerPage = 50;
+
     // Performance: Initialize Suggestions Data (memoized)
     const suggestionData = initializeSuggestions();
 
@@ -29,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Debounce: Wait 300ms after user stops typing
         debounceTimer = setTimeout(() => {
+            currentPage = 1; // Reset to first page on search
             renderTools();
             renderSuggestions(searchTerm);
         }, 300);
@@ -70,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             categoryBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentCategory = btn.dataset.category;
+            currentPage = 1; // Reset to first page on category change
             renderTools();
         });
     });
@@ -185,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     searchTerm = match.text.toLowerCase();
                     searchSuggestions.classList.add('hidden');
                     clearTimeout(debounceTimer);
+                    currentPage = 1; // Reset to first page
                     renderTools();
                 });
                 
@@ -207,8 +213,107 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Pagination Rendering
+    function renderPagination(totalItems) {
+        const paginationContainer = document.getElementById('pagination-container');
+        paginationContainer.innerHTML = '';
+
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        if (totalPages <= 1) return;
+
+        // Previous Button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'pagination-btn';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTools();
+                window.scrollTo({ top: document.getElementById('tools-grid').offsetTop - 100, behavior: 'smooth' });
+            }
+        });
+        paginationContainer.appendChild(prevBtn);
+
+        // Page Numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 1) {
+            const firstPageBtn = document.createElement('button');
+            firstPageBtn.className = 'pagination-btn';
+            firstPageBtn.textContent = '1';
+            firstPageBtn.addEventListener('click', () => {
+                currentPage = 1;
+                renderTools();
+                window.scrollTo({ top: document.getElementById('tools-grid').offsetTop - 100, behavior: 'smooth' });
+            });
+            paginationContainer.appendChild(firstPageBtn);
+
+            if (startPage > 2) {
+                const dots = document.createElement('span');
+                dots.className = 'pagination-dots';
+                dots.textContent = '...';
+                paginationContainer.appendChild(dots);
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i;
+            pageBtn.addEventListener('click', () => {
+                currentPage = i;
+                renderTools();
+                window.scrollTo({ top: document.getElementById('tools-grid').offsetTop - 100, behavior: 'smooth' });
+            });
+            paginationContainer.appendChild(pageBtn);
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const dots = document.createElement('span');
+                dots.className = 'pagination-dots';
+                dots.textContent = '...';
+                paginationContainer.appendChild(dots);
+            }
+
+            const lastPageBtn = document.createElement('button');
+            lastPageBtn.className = 'pagination-btn';
+            lastPageBtn.textContent = totalPages;
+            lastPageBtn.addEventListener('click', () => {
+                currentPage = totalPages;
+                renderTools();
+                window.scrollTo({ top: document.getElementById('tools-grid').offsetTop - 100, behavior: 'smooth' });
+            });
+            paginationContainer.appendChild(lastPageBtn);
+        }
+
+        // Next Button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'pagination-btn';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTools();
+                window.scrollTo({ top: document.getElementById('tools-grid').offsetTop - 100, behavior: 'smooth' });
+            }
+        });
+        paginationContainer.appendChild(nextBtn);
+    }
+
     // PERFORMANCE: Optimized rendering with DocumentFragment
     function renderTools() {
+        if (!toolsGrid) return; // Guard clause for pages without tools grid
+        
         const startTime = performance.now();
         
         toolsGrid.innerHTML = '';
@@ -221,12 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // PERFORMANCE: Optimize filtering
         if (!hasSearch && !hasCategory) {
-            // Show first 50 tools when no filters
-            filteredTools = tools.slice(0, 50);
+            // Use all tools
+            filteredTools = tools;
         } else {
-            // Filter with early exit
-            const maxResults = 100;
-            for (let i = 0; i < tools.length && filteredTools.length < maxResults; i++) {
+            // Filter
+            for (let i = 0; i < tools.length; i++) {
                 const tool = tools[i];
                 
                 // Category check (fast)
@@ -252,17 +356,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filteredTools.length === 0) {
             noResults.classList.remove('hidden');
+            document.getElementById('pagination-container').innerHTML = ''; // Clear pagination
         } else {
             noResults.classList.add('hidden');
             
+            // Pagination Logic
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedTools = filteredTools.slice(startIndex, endIndex);
+
             // Use DocumentFragment for better performance
             const fragment = document.createDocumentFragment();
             
-            // Show up to 50 results initially for speed
-            const displayLimit = Math.min(filteredTools.length, 50);
-            
-            for (let i = 0; i < displayLimit; i++) {
-                const tool = filteredTools[i];
+            for (let i = 0; i < paginatedTools.length; i++) {
+                const tool = paginatedTools[i];
                 const card = document.createElement('div');
                 card.className = 'tool-card';
                 
@@ -272,24 +379,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <h2>${tool.name}</h2>
                     <p>${tool.description}</p>
-                    <a href="${tool.url}" target="_blank" class="tool-link">Visit Tool</a>
+                    <a href="tool.html?name=${encodeURIComponent(tool.name)}" class="tool-link">View Details</a>
                 `;
                 
                 fragment.appendChild(card);
+                
+                // Make card clickable (except the button to avoid double event)
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('tool-link')) {
+                        window.location.href = `tool.html?name=${encodeURIComponent(tool.name)}`;
+                    }
+                });
             }
             
             toolsGrid.appendChild(fragment);
             
-            // Show count if there are more results
-            if (filteredTools.length > displayLimit) {
-                const moreIndicator = document.createElement('div');
-                moreIndicator.style.gridColumn = '1 / -1';
-                moreIndicator.style.textAlign = 'center';
-                moreIndicator.style.padding = '20px';
-                moreIndicator.style.color = 'var(--text-color)';
-                moreIndicator.innerHTML = `<p>Showing ${displayLimit} of ${filteredTools.length} results. Use search to narrow down.</p>`;
-                toolsGrid.appendChild(moreIndicator);
-            }
+            // Render Pagination
+            renderPagination(filteredTools.length);
         }
         
         // Optional: Log performance
