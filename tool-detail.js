@@ -14,21 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUser = user;
     });
 
-    // Theme Toggle Logic (Same as index)
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        htmlElement.setAttribute('data-theme', newTheme);
-        
-        const icon = themeToggle.querySelector('i');
-        if (newTheme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
-    });
+    // Theme Toggle Logic is now handled in scripts.js
 
     // Get Tool ID/Name from URL
     const urlParams = new URLSearchParams(window.location.search);

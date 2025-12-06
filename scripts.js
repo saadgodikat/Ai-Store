@@ -17,83 +17,114 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     const itemsPerPage = 50;
 
-    // Performance: Initialize Suggestions Data (memoized)
-    const suggestionData = initializeSuggestions();
+    // Theme Logic
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    }
 
-    // Initial Render - Show limited results
-    renderTools();
-
-    // PERFORMANCE FIX: Debounced Search Listener
-    searchInput.addEventListener('input', (e) => {
-        searchTerm = e.target.value.toLowerCase();
-        
-        // Clear previous timer
-        clearTimeout(debounceTimer);
-        
-        // Debounce: Wait 300ms after user stops typing
-        debounceTimer = setTimeout(() => {
-            currentPage = 1; // Reset to first page on search
-            renderTools();
-            renderSuggestions(searchTerm);
-        }, 300);
-    });
-
-    // Suggestion Keyboard Navigation
-    searchInput.addEventListener('keydown', (e) => {
-        const items = searchSuggestions.querySelectorAll('.suggestion-item');
-        if (items.length === 0) return;
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
-            updateActiveSuggestion(items);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
-            updateActiveSuggestion(items);
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (selectedSuggestionIndex >= 0) {
-                items[selectedSuggestionIndex].click();
-            }
-        } else if (e.key === 'Escape') {
-            searchSuggestions.classList.add('hidden');
-        }
-    });
-
-    // Close suggestions when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
-            searchSuggestions.classList.add('hidden');
-        }
-    });
-
-    // Category Listeners
-    categoryBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            categoryBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentCategory = btn.dataset.category;
-            currentPage = 1; // Reset to first page on category change
-            renderTools();
-        });
-    });
-
-    // Theme Toggle
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        htmlElement.setAttribute('data-theme', newTheme);
-        
+    function updateThemeIcon(theme) {
+        if (!themeToggle) return;
         const icon = themeToggle.querySelector('i');
-        if (newTheme === 'dark') {
+        if (theme === 'dark') {
             icon.classList.remove('fa-moon');
             icon.classList.add('fa-sun');
         } else {
             icon.classList.remove('fa-sun');
             icon.classList.add('fa-moon');
         }
-    });
+    }
+
+    // Initialize theme on load - PRIORITY
+    initTheme();
+
+    // Theme Toggle Listener
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
+
+    // Performance: Initialize Suggestions Data (memoized)
+    // Only if we have search capability
+    let suggestionData = null;
+    if (searchInput) {
+        suggestionData = initializeSuggestions();
+    }
+
+    // Initial Render - Show limited results
+    // Only if we have a grid to render to
+    if (toolsGrid) {
+        renderTools();
+    }
+
+    // PERFORMANCE FIX: Debounced Search Listener
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value.toLowerCase();
+            
+            // Clear previous timer
+            clearTimeout(debounceTimer);
+            
+            // Debounce: Wait 300ms after user stops typing
+            debounceTimer = setTimeout(() => {
+                currentPage = 1; // Reset to first page on search
+                renderTools();
+                renderSuggestions(searchTerm);
+            }, 300);
+        });
+
+        // Suggestion Keyboard Navigation
+        searchInput.addEventListener('keydown', (e) => {
+            if (!searchSuggestions) return;
+            
+            const items = searchSuggestions.querySelectorAll('.suggestion-item');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+                updateActiveSuggestion(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+                updateActiveSuggestion(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedSuggestionIndex >= 0) {
+                    items[selectedSuggestionIndex].click();
+                }
+            } else if (e.key === 'Escape') {
+                searchSuggestions.classList.add('hidden');
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (searchSuggestions && !searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.classList.add('hidden');
+            }
+        });
+    }
+
+    // Category Listeners
+    if (categoryBtns.length > 0) {
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                currentPage = 1; // Reset to first page on category change
+                renderTools();
+            });
+        });
+    }
 
     // PERFORMANCE: Only compute once on load
     function initializeSuggestions() {
