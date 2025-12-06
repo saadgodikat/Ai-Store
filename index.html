@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <!-- Primary Meta Tags -->
-    <title>AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools</title>
-    <meta name="title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
-    <meta name="description" content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity. Search and filter the best AI tools in one place.">
-    <meta name="keywords" content="AI tools, artificial intelligence, ChatGPT, Claude, Midjourney, AI directory, AI tools list, machine learning tools">
-    <meta name="author" content="AI Nexus">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://saadgodikat.github.io/Ai-Store/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://saadgodikat.github.io/Ai-Store/">
-    <meta property="og:title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
-    <meta property="og:description" content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity. Search and filter the best AI tools in one place.">
-    <meta property="og:site_name" content="AI Nexus">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://saadgodikat.github.io/Ai-Store/">
-    <meta property="twitter:title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
-    <meta property="twitter:description" content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity.">
-    
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Primary Meta Tags -->
+  <title>AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools</title>
+  <meta name="title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
+  <meta name="description"
+    content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity. Search and filter the best AI tools in one place.">
+  <meta name="keywords"
+    content="AI tools, artificial intelligence, ChatGPT, Claude, Midjourney, AI directory, AI tools list, machine learning tools">
+  <meta name="author" content="AI Nexus">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://saadgodikat.github.io/Ai-Store/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://saadgodikat.github.io/Ai-Store/">
+  <meta property="og:title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
+  <meta property="og:description"
+    content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity. Search and filter the best AI tools in one place.">
+  <meta property="og:site_name" content="AI Nexus">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://saadgodikat.github.io/Ai-Store/">
+  <meta property="twitter:title" content="AI Nexus – Curated AI Tools Directory | 2000+ Verified Tools">
+  <meta property="twitter:description"
+    content="Discover 2000+ verified AI tools for chat, image generation, coding, writing, video, audio, and productivity.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -150,73 +155,126 @@
   ]
 }
     </script>
-    
-    <!-- Stylesheets and Fonts -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheets and Fonts -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo-section">
-                <h1>AI Nexus</h1>
-                <p>Curated directory of the best AI tools</p>
-            </div>
-            
-            <div class="search-container">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder="Search for AI tools..." autocomplete="off">
-                    <div id="search-suggestions" class="suggestions-container hidden"></div>
-                </div>
-            </div>
+  <header>
+    <div class="header-content">
+      <div class="logo-section">
+        <h1>AI Nexus</h1>
+        <p>Curated directory of the best AI tools</p>
+      </div>
 
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <a href="login.html" class="login-link" style="text-decoration: none; color: var(--text-color); font-weight: 500;">Login</a>
-                <button id="theme-toggle" aria-label="Toggle Dark Mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
+      <div class="search-container">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" id="search-input" placeholder="Search for AI tools..." autocomplete="off">
+          <div id="search-suggestions" class="suggestions-container hidden"></div>
         </div>
+      </div>
 
-        <div class="categories-container">
-            <button class="category-btn active" data-category="all">All</button>
-            <button class="category-btn" data-category="chat">Chat</button>
-            <button class="category-btn" data-category="image">Image</button>
-            <button class="category-btn" data-category="video">Video</button>
-            <button class="category-btn" data-category="coding">Coding</button>
-            <button class="category-btn" data-category="writing">Writing</button>
-            <button class="category-btn" data-category="audio">Audio</button>
-            <button class="category-btn" data-category="productivity">Productivity</button>
-        </div>
-    </header>
-    
-    <main>
-        <section class="hero-section">
-            <div class="hero-content">
-                <h2>Unlock the Future of Creativity & Productivity</h2>
-                <p>AI Nexus is your trusted gateway to the world's best AI tools. We curate and verify thousands of applications to help you find the perfect solution for any task—from coding and writing to image generation and video editing.</p>
-            </div>
-        </section>
-        <section id="tools-grid">
-            <!-- Tools will be dynamically inserted here -->
-        </section>
-        <div id="no-results" class="hidden">
-            <i class="fas fa-search"></i>
-            <p>No tools found matching your search.</p>
-        </div>
-        <div id="pagination-container" class="pagination-container"></div>
-    </main>
-    
-    <footer>
-        <p>&copy; 2024 AI Nexus. All Rights Reserved.</p>
-    </footer>
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <a href="login.html" class="login-link"
+          style="text-decoration: none; color: var(--text-color); font-weight: 500;">Login</a>
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
 
-    <script src="tools-data.js"></script>
-    <script src="scripts.js"></script>
-    <script type="module" src="auth.js"></script>
+    <div class="categories-container">
+      <button class="category-btn active" data-category="all">All</button>
+      <button class="category-btn" data-category="chat">Chat</button>
+      <button class="category-btn" data-category="image">Image</button>
+      <button class="category-btn" data-category="video">Video</button>
+      <button class="category-btn" data-category="coding">Coding</button>
+      <button class="category-btn" data-category="writing">Writing</button>
+      <button class="category-btn" data-category="audio">Audio</button>
+      <button class="category-btn" data-category="productivity">Productivity</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section">
+      <div class="hero-content">
+        <h2>Unlock the Future of Creativity & Productivity</h2>
+        <p>AI Nexus is your trusted gateway to the world's best AI tools. We curate and verify thousands of applications
+          to help you find the perfect solution for any task—from coding and writing to image generation and video
+          editing.</p>
+      </div>
+    </section>
+    <section id="tools-grid">
+      <!-- Static Fallback Content for SEO and Initial Load -->
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Chat</span>
+        </div>
+        <h2>ChatGPT</h2>
+        <p>Versatile AI assistant for chat, coding, writing, and more.</p>
+        <a href="tool.html?name=ChatGPT" class="tool-link">View Details</a>
+      </div>
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Image</span>
+        </div>
+        <h2>Midjourney</h2>
+        <p>AI for generating high-quality images from text prompts.</p>
+        <a href="tool.html?name=Midjourney" class="tool-link">View Details</a>
+      </div>
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Chat</span>
+        </div>
+        <h2>Claude</h2>
+        <p>Friendly AI assistant with strong reasoning and writing skills.</p>
+        <a href="tool.html?name=Claude" class="tool-link">View Details</a>
+      </div>
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Coding</span>
+        </div>
+        <h2>GitHub Copilot</h2>
+        <p>AI pair programmer that suggests code and entire functions.</p>
+        <a href="tool.html?name=GitHub%20Copilot" class="tool-link">View Details</a>
+      </div>
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Audio</span>
+        </div>
+        <h2>ElevenLabs</h2>
+        <p>AI voice generator with realistic text-to-speech cloning.</p>
+        <a href="tool.html?name=ElevenLabs" class="tool-link">View Details</a>
+      </div>
+      <div class="tool-card static-fallback">
+        <div class="tool-header">
+          <span class="tool-tag">Video</span>
+        </div>
+        <h2>Runway</h2>
+        <p>AI-powered creative suite for video editing and generation.</p>
+        <a href="tool.html?name=Runway" class="tool-link">View Details</a>
+      </div>
+    </section>
+    <div id="no-results" class="hidden">
+      <i class="fas fa-search"></i>
+      <p>No tools found matching your search.</p>
+    </div>
+    <div id="pagination-container" class="pagination-container"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 AI Nexus. All Rights Reserved.</p>
+  </footer>
+
+  <script src="tools-data.js"></script>
+  <script src="scripts.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
+
 </html>

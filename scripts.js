@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.addEventListener('click', () => {
             const currentTheme = htmlElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             htmlElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial Render - Show limited results
     // Only if we have a grid to render to
     if (toolsGrid) {
+        // Hydration: renderTools will clear the static fallback
         renderTools();
     }
 
@@ -68,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             searchTerm = e.target.value.toLowerCase();
-            
+
             // Clear previous timer
             clearTimeout(debounceTimer);
-            
+
             // Debounce: Wait 300ms after user stops typing
             debounceTimer = setTimeout(() => {
                 currentPage = 1; // Reset to first page on search
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Suggestion Keyboard Navigation
         searchInput.addEventListener('keydown', (e) => {
             if (!searchSuggestions) return;
-            
+
             const items = searchSuggestions.querySelectorAll('.suggestion-item');
             if (items.length === 0) return;
 
@@ -130,14 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeSuggestions() {
         const categories = new Set();
         const keywords = new Set();
-        
+
         // Limit to first 1000 names to prevent lag
         const names = [];
         let nameCount = 0;
 
         for (let i = 0; i < tools.length; i++) {
             const tool = tools[i];
-            
+
             // Add Category
             if (tool.category && tool.category !== 'other') {
                 categories.add(tool.category);
@@ -205,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use DocumentFragment for better performance
             const fragment = document.createDocumentFragment();
             searchSuggestions.innerHTML = '';
-            
+
             matches.forEach((match, index) => {
                 const div = document.createElement('div');
                 div.className = 'suggestion-item';
@@ -215,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="suggestion-text">${match.text}</span>
                     <span class="suggestion-type">${match.type}</span>
                 `;
-                
+
                 div.addEventListener('click', () => {
                     searchInput.value = match.text;
                     searchTerm = match.text.toLowerCase();
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentPage = 1; // Reset to first page
                     renderTools();
                 });
-                
+
                 fragment.appendChild(div);
             });
 
@@ -344,17 +345,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // PERFORMANCE: Optimized rendering with DocumentFragment
     function renderTools() {
         if (!toolsGrid) return; // Guard clause for pages without tools grid
-        
+
         const startTime = performance.now();
-        
+
+        // Clear content (including static fallback)
         toolsGrid.innerHTML = '';
-        
+
         // Early exit if no search term and showing all
         const hasSearch = searchTerm.length > 0;
         const hasCategory = currentCategory !== 'all';
-        
+
         let filteredTools = [];
-        
+
         // PERFORMANCE: Optimize filtering
         if (!hasSearch && !hasCategory) {
             // Use all tools
@@ -363,19 +365,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Filter
             for (let i = 0; i < tools.length; i++) {
                 const tool = tools[i];
-                
+
                 // Category check (fast)
                 if (hasCategory && tool.category !== currentCategory) {
                     continue;
                 }
-                
+
                 // Search check
                 if (hasSearch) {
                     const searchLower = searchTerm;
                     const nameMatch = tool.name.toLowerCase().includes(searchLower);
                     const descMatch = tool.description.toLowerCase().includes(searchLower);
                     const keywordMatch = tool.keywords && tool.keywords.some(k => k.includes(searchLower));
-                    
+
                     if (nameMatch || descMatch || keywordMatch) {
                         filteredTools.push(tool);
                     }
@@ -386,11 +388,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (filteredTools.length === 0) {
+            // Only show no results if we actually tried to filter and found nothing
+            // OR if the dataset itself is empty (rare)
             noResults.classList.remove('hidden');
             document.getElementById('pagination-container').innerHTML = ''; // Clear pagination
         } else {
             noResults.classList.add('hidden');
-            
+
             // Pagination Logic
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
@@ -398,12 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Use DocumentFragment for better performance
             const fragment = document.createDocumentFragment();
-            
+
             for (let i = 0; i < paginatedTools.length; i++) {
                 const tool = paginatedTools[i];
                 const card = document.createElement('div');
                 card.className = 'tool-card';
-                
+
                 card.innerHTML = `
                     <div class="tool-header">
                         <span class="tool-tag">${tool.category || tool.tag}</span>
@@ -412,9 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${tool.description}</p>
                     <a href="tool.html?name=${encodeURIComponent(tool.name)}" class="tool-link">View Details</a>
                 `;
-                
+
                 fragment.appendChild(card);
-                
+
                 // Make card clickable (except the button to avoid double event)
                 card.style.cursor = 'pointer';
                 card.addEventListener('click', (e) => {
@@ -423,13 +427,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             }
-            
+
             toolsGrid.appendChild(fragment);
-            
+
             // Render Pagination
             renderPagination(filteredTools.length);
         }
-        
+
         // Optional: Log performance
         const endTime = performance.now();
         if (endTime - startTime > 100) {
