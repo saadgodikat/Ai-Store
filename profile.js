@@ -25,7 +25,12 @@ function setupEditProfile(user) {
     // Open Modal
     editBtn.addEventListener('click', () => {
         nameInput.value = user.displayName || '';
-        photoInput.value = user.photoURL || '';
+        const currentPhoto = user.photoURL || '';
+        photoInput.value = currentPhoto;
+
+        // Generate Avatar Grid
+        generateAvatarGrid(currentPhoto, photoInput);
+
         modal.classList.remove('hidden');
     });
 
@@ -86,6 +91,57 @@ function setupEditProfile(user) {
     });
 }
 
+function generateAvatarGrid(currentPhoto, inputElement) {
+    const grid = document.getElementById('avatar-selection-grid');
+    grid.innerHTML = '';
+
+    // Helper to create avatar element
+    const createAvatarEl = (url, isCurrent = false) => {
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'avatar-option';
+        if (url === inputElement.value) img.classList.add('selected');
+
+        img.onclick = () => {
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            img.classList.add('selected');
+            inputElement.value = url;
+        };
+
+        wrapper.appendChild(img);
+
+        if (isCurrent) {
+            const label = document.createElement('span');
+            label.className = 'current-avatar-label';
+            label.textContent = 'Current';
+            wrapper.appendChild(label);
+        }
+
+        return wrapper;
+    };
+
+    // 1. Add Current Avatar (if exists and is a URL)
+    if (currentPhoto) {
+        grid.appendChild(createAvatarEl(currentPhoto, true));
+    }
+
+    // 2. Generate Random Avatars (DiceBear)
+    const seeds = ['Felix', 'Aneka', 'Mittens', 'Bubba', 'Snowball', 'Whiskers'];
+    // You can use random strings or predefined seeds
+    for (let i = 0; i < 5; i++) {
+        const seed = Math.random().toString(36).substring(7);
+        const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
+        // Prevent duplicate current avatar if it matches format
+        if (url !== currentPhoto) {
+            grid.appendChild(createAvatarEl(url));
+        }
+    }
+}
 async function loadUserRatings(userId) {
     const ratingsList = document.getElementById('user-ratings-list');
 

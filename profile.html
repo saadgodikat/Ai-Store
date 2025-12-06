@@ -154,6 +154,45 @@
             margin-left: auto;
             margin-right: 10px;
         }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .avatar-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            object-fit: cover;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+            transform: scale(1.1);
+        }
+
+        .current-avatar-label {
+            display: block;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--primary-color);
+            margin-top: 4px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -223,8 +262,11 @@
                         <input type="text" id="edit-display-name" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit-photo-url">Photo URL</label>
-                        <input type="url" id="edit-photo-url" placeholder="https://example.com/photo.jpg">
+                        <label>Choose Avatar</label>
+                        <div id="avatar-selection-grid" class="avatar-grid">
+                            <!-- Avatars will be injected here -->
+                        </div>
+                        <input type="hidden" id="edit-photo-url">
                     </div>
                     <div class="modal-actions">
                         <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Cancel</button>
