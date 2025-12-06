@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://saadgodikat.github.io/Ai-Store/sitemap.xml
